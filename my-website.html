@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Benjamin Cheung, D.D.S. — General Dentist · San Francisco</title>
+  <meta name="description" content="Benjamin Cheung, D.D.S. — General Dentist based in San Francisco, CA. Get in touch to learn more." />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #080d1a;
+      --card:         #0f1628;
+      --card-border:  #2a3a60;
+      --ink:          #e8d5a0;
+      --muted:        #7a7060;
+      --accent:       #d4a843;
+      --accent-light: #111d38;
+    }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--bg);
+      background-image: radial-gradient(ellipse 60% 55% at 50% 50%, #121a35 0%, #05080f 100%);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+
+    /* ── CORONA WRAP ── */
+    .corona-wrap {
+      position: relative;
+      max-width: 420px;
+      width: 100%;
+      z-index: 1;
+    }
+    .corona1, .corona2 {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+    }
+    .corona1 {
+      inset: -60px;
+      background: radial-gradient(ellipse 120% 80% at 40% 60%,
+        rgba(212,168,67,0.18) 0%, rgba(180,120,30,0.08) 45%, transparent 70%);
+      filter: blur(20px);
+      z-index: 0;
+      animation: corona1 9s ease-in-out infinite;
+    }
+    .corona2 {
+      inset: -80px;
+      background: radial-gradient(ellipse 70% 130% at 70% 30%,
+        rgba(212,168,67,0.14) 0%, rgba(200,140,20,0.06) 40%, transparent 65%);
+      filter: blur(28px);
+      z-index: 0;
+      animation: corona2 6s ease-in-out 1.5s infinite;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 1.6rem;
+      padding: 4rem 3.2rem;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 2px 40px rgba(0,0,0,0.6);
+      animation: rise 0.9s cubic-bezier(.22,1,.36,1) both,
+                 flicker 14s ease-in-out 1s infinite;
+    }
+
+    /* Staggered fade-in */
+    .card > * {
+      opacity: 0;
+      animation: fadeUp 1.2s ease forwards;
+    }
+    .card > *:nth-child(1) { animation-delay: 0.4s; }
+    .card > *:nth-child(2) { animation-delay: 0.7s; }
+    .card > *:nth-child(3) { animation-delay: 0.95s; }
+    .card > *:nth-child(4) { animation-delay: 1.2s; }
+    .card > *:nth-child(5) { animation-delay: 1.45s; }
+    .card > *:nth-child(6) { animation-delay: 1.7s; }
+    .card > *:nth-child(7) { animation-delay: 1.95s; }
+    .card > *:nth-child(8) { animation-delay: 2.1s; }
+
+    /* ── PHOTO ── */
+    .photo-wrap {
+      width: 140px; height: 140px;
+      margin: 0 auto 2.6rem;
+      border-radius: 50%;
+      background: var(--accent-light);
+      border: 2px solid rgba(212,168,67,0.4);
+      overflow: hidden;
+      display: block;
+    }
+    .photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── NAME & TITLE ── */
+    .name {
+      font-family: 'Lora', serif; font-size: 2.2rem; font-weight: 400;
+      letter-spacing: 0.06em; line-height: 1.1; margin-bottom: 0.55rem;
+      color: var(--ink);
+    }
+    .degree {
+      font-family: 'Lora', serif; font-style: italic;
+      font-size: 1rem; color: var(--accent); margin-bottom: 0.3rem;
+    }
+    .specialty {
+      font-size: 0.75rem; font-weight: 400; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .location {
+      font-size: 0.78rem; color: var(--muted);
+      display: flex; align-items: center; justify-content: center;
+      gap: 0.35rem; margin-top: 0.5rem;
+    }
+    .location svg { width: 11px; height: 11px; opacity: 0.4; }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212,168,67,0.4), transparent);
+      margin: 1.8rem auto;
+      border: none;
+    }
+
+    /* ── NOTE ── */
+    .note {
+      font-size: 0.88rem; color: var(--muted);
+      line-height: 1.8; margin-bottom: 2.4rem;
+    }
+
+    /* ── CONTACT ── */
+    .contact-list { display: flex; flex-direction: column; gap: 0.7rem; }
+    .contact-soon {
+      font-size: 0.82rem; color: #c8a050;
+      font-style: italic; margin-bottom: 0.3rem; opacity: 0.85;
+    }
+    .contact-item {
+      display: flex; align-items: center; gap: 0.85rem;
+      background: #0a0f1e; border: 1px solid #1a2440;
+      border-radius: 0.75rem; padding: 0.85rem 1.1rem;
+      text-decoration: none; color: var(--ink);
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    .contact-item:hover {
+      border-color: var(--accent); background: #0f1628;
+      box-shadow: 0 0 18px 2px rgba(212,168,67,0.10);
+    }
+    .contact-icon {
+      width: 34px; height: 34px; border-radius: 0.5rem;
+      background: var(--accent-light); border: 1px solid #1e2e50;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .contact-icon svg { width: 16px; height: 16px; }
+    .contact-info-text { text-align: left; }
+    .contact-label {
+      font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); font-weight: 500; line-height: 1; margin-bottom: 0.25rem;
+    }
+    .contact-value { font-size: 0.9rem; font-weight: 400; color: var(--ink); }
+    .contact-value.pending { font-style: italic; opacity: 0.65; font-size: 0.85rem; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes corona1 {
+      0%   { transform: scale(1)    rotate(0deg);  opacity: 1; }
+      25%  { transform: scale(1.15) rotate(8deg);  opacity: 0.7; }
+      50%  { transform: scale(0.9)  rotate(-5deg); opacity: 1; }
+      75%  { transform: scale(1.2)  rotate(12deg); opacity: 0.6; }
+      100% { transform: scale(1)    rotate(0deg);  opacity: 1; }
+    }
+    @keyframes corona2 {
+      0%   { transform: scale(1)    rotate(0deg);   opacity: 0.8; }
+      30%  { transform: scale(1.3)  rotate(-15deg); opacity: 0.5; }
+      60%  { transform: scale(0.85) rotate(10deg);  opacity: 1; }
+      80%  { transform: scale(1.1)  rotate(-8deg);  opacity: 0.6; }
+      100% { transform: scale(1)    rotate(0deg);   opacity: 0.8; }
+    }
+    @keyframes flicker {
+      0%   { box-shadow: 0 0 55px  8px rgba(212,168,67,0.09), 0 0 110px 22px rgba(212,168,67,0.05), 0 2px 40px rgba(0,0,0,0.6); }
+      20%  { box-shadow: 0 0 50px  7px rgba(212,168,67,0.07), 0 0  95px 18px rgba(212,168,67,0.04), 0 2px 40px rgba(0,0,0,0.6); }
+      35%  { box-shadow: 0 0 62px 10px rgba(212,168,67,0.11), 0 0 120px 26px rgba(212,168,67,0.06), 0 2px 40px rgba(0,0,0,0.6); }
+      55%  { box-shadow: 0 0 52px  8px rgba(212,168,67,0.08), 0 0 105px 20px rgba(212,168,67,0.05), 0 2px 40px rgba(0,0,0,0.6); }
+      70%  { box-shadow: 0 0 65px 11px rgba(212,168,67,0.12), 0 0 125px 28px rgba(212,168,67,0.07), 0 2px 40px rgba(0,0,0,0.6); }
+      85%  { box-shadow: 0 0 48px  6px rgba(212,168,67,0.07), 0 0  90px 16px rgba(212,168,67,0.04), 0 2px 40px rgba(0,0,0,0.6); }
+      100% { box-shadow: 0 0 55px  8px rgba(212,168,67,0.09), 0 0 110px 22px rgba(212,168,67,0.05), 0 2px 40px rgba(0,0,0,0.6); }
+    }
+
+    /* ── LAST UPDATED ── */
+    .last-updated {
+      margin-top: 1.6rem;
+      font-size: 0.65rem;
+      color: #2e3a55;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 2.5rem 1.6rem; }
+      .name { font-size: 1.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="corona-wrap">
+    <div class="corona1"></div>
+    <div class="corona2"></div>
+    <div class="card">
+      <div class="photo-wrap">
+        <img src="bc%20photo.JPG" alt="Dr. Benjamin Cheung" />
+      </div>
+
+      <div class="name">Benjamin Cheung</div>
+      <div class="degree">D.D.S.</div>
+      <div class="specialty">General Dentistry</div>
+      <div class="location">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+        </svg>
+        San Francisco, CA
+      </div>
+
+      <div class="divider"></div>
+
+      <p class="note">
+        I'm still practicing here in San Francisco.<br>
+        Feel free to reach out — I'd love to hear from you.
+      </p>
+
+      <div class="contact-list">
+        <div class="contact-soon">I promise I exist. Contact details coming very soon!</div>
+        <a class="contact-item">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#d4a843" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.05 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16.92z"/>
+            </svg>
+          </div>
+          <div class="contact-info-text">
+            <div class="contact-label">Phone</div>
+            <div class="contact-value pending">Dialing it in...</div>
+          </div>
+        </a>
+        <a class="contact-item">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#d4a843" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </div>
+          <div class="contact-info-text">
+            <div class="contact-label">Email</div>
+            <div class="contact-value pending">Drafting it up...</div>
+          </div>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="last-updated">Last updated March 2026</div>
+
+</body>
+</html>
