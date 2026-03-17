@@ -77,19 +77,13 @@
                  flicker 14s ease-in-out 1s infinite;
     }
 
-    /* Staggered fade-in */
+    /* Staggered fade-in — triggered by JS after page load */
     .card > * {
       opacity: 0;
+    }
+    .card > *.fade-in {
       animation: fadeUp 1.2s ease forwards;
     }
-    .card > *:nth-child(1) { animation-delay: 0.4s; }
-    .card > *:nth-child(2) { animation-delay: 0.7s; }
-    .card > *:nth-child(3) { animation-delay: 0.95s; }
-    .card > *:nth-child(4) { animation-delay: 1.2s; }
-    .card > *:nth-child(5) { animation-delay: 1.45s; }
-    .card > *:nth-child(6) { animation-delay: 1.7s; }
-    .card > *:nth-child(7) { animation-delay: 1.95s; }
-    .card > *:nth-child(8) { animation-delay: 2.1s; }
 
     /* ── PHOTO ── */
     .photo-wrap {
@@ -215,7 +209,7 @@
       opacity: 0;
     }
     .contact-form-wrap.open {
-      max-height: 600px;
+      max-height: 900px;
       opacity: 1;
     }
     .contact-form {
@@ -267,11 +261,8 @@
     }
 
     .cf-turnstile {
+      width: 300px;
       margin: 0.25rem auto;
-      width: fit-content;
-      left: 50%;
-      transform: translateX(-50%);
-      position: relative;
     }
 
     .form-success-msg {
@@ -421,6 +412,17 @@
   <div class="last-updated">Last updated March 2026</div>
 
   <script>
+    window.addEventListener('load', function() {
+      const children = document.querySelectorAll('.card > *');
+      const delays = [0.1, 0.35, 0.55, 0.75, 0.95, 1.15, 1.35, 1.55];
+      children.forEach(function(el, i) {
+        setTimeout(function() {
+          el.style.animationDelay = '0s';
+          el.classList.add('fade-in');
+        }, (delays[i] || i * 0.2) * 1000);
+      });
+    });
+
     function toggleForm() {
       const btn  = document.getElementById('formToggle');
       const wrap = document.getElementById('contactFormWrap');
