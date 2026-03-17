@@ -176,6 +176,108 @@
     .contact-value { font-size: 0.9rem; font-weight: 400; color: var(--ink); }
     .contact-value.pending { font-style: italic; opacity: 0.65; font-size: 0.85rem; }
 
+    /* ── FORMSPREE FORM ── */
+    .form-toggle-btn {
+      display: flex; align-items: center; gap: 0.85rem;
+      background: #0a0f1e; border: 1px solid #1a2440;
+      border-radius: 0.75rem; padding: 0.85rem 1.1rem;
+      color: var(--ink); cursor: pointer; width: 100%;
+      text-align: left;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    .form-toggle-btn:hover {
+      border-color: var(--accent); background: #0f1628;
+      box-shadow: 0 0 18px 2px rgba(212,168,67,0.10);
+    }
+    .form-toggle-btn .contact-icon {
+      width: 34px; height: 34px; border-radius: 0.5rem;
+      background: var(--accent-light); border: 1px solid #1e2e50;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .form-toggle-btn .contact-icon svg { width: 16px; height: 16px; }
+    .form-toggle-btn .contact-info-text { text-align: left; flex: 1; }
+    .form-toggle-btn .contact-label {
+      font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); font-weight: 500; line-height: 1; margin-bottom: 0.25rem;
+    }
+    .form-toggle-btn .contact-value { font-size: 0.9rem; font-weight: 400; color: var(--ink); }
+    .form-toggle-btn .chevron {
+      margin-left: auto; transition: transform 0.3s ease;
+      color: var(--muted); flex-shrink: 0;
+    }
+    .form-toggle-btn.open .chevron { transform: rotate(180deg); }
+    .form-toggle-btn.open { border-radius: 0.75rem 0.75rem 0 0; border-bottom-color: transparent; }
+
+    .contact-form-wrap {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+    .contact-form-wrap.open {
+      max-height: 600px;
+      opacity: 1;
+    }
+    .contact-form {
+      background: #0a0f1e;
+      border: 1px solid #1a2440;
+      border-top: none;
+      border-radius: 0 0 0.75rem 0.75rem;
+      padding: 1.2rem;
+      display: flex; flex-direction: column; gap: 0.75rem;
+    }
+    .form-field {
+      display: flex; flex-direction: column; gap: 0.3rem;
+    }
+    .form-field label {
+      font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); font-weight: 500;
+    }
+    .form-field input,
+    .form-field textarea {
+      background: #0f1628; border: 1px solid #1e2a45;
+      border-radius: 0.5rem; padding: 0.65rem 0.85rem;
+      color: var(--ink); font-family: 'Jost', sans-serif;
+      font-size: 0.88rem; outline: none; width: 100%;
+      transition: border-color 0.2s;
+    }
+    .form-field input:focus,
+    .form-field textarea:focus { border-color: var(--accent); }
+    .form-field input::placeholder,
+    .form-field textarea::placeholder { color: #3a4560; }
+    .form-field textarea { resize: vertical; min-height: 90px; }
+    .form-submit {
+      background: transparent;
+      border: 1px solid rgba(212,168,67,0.35);
+      border-radius: 0.5rem; padding: 0.7rem;
+      color: var(--accent); font-family: 'Jost', sans-serif;
+      font-size: 0.78rem; letter-spacing: 0.1em;
+      text-transform: uppercase; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    .form-submit:hover {
+      border-color: var(--accent); background: rgba(212,168,67,0.05);
+      box-shadow: 0 0 14px 1px rgba(212,168,67,0.08);
+    }
+    .form-disclaimer {
+      font-size: 0.62rem; color: #4a5a80;
+      line-height: 1.6; text-align: center;
+      padding: 0.5rem 0.25rem 0;
+      border-top: 1px solid #1a2440;
+    }
+
+    .cf-turnstile {
+      margin: 0.25rem auto;
+      display: flex;
+      justify-content: center;
+    }
+
+    .form-success-msg {
+      display: none; text-align: center;
+      font-size: 0.82rem; color: var(--accent);
+      font-style: italic; padding: 0.5rem 0;
+    }
+
     /* ── ANIMATIONS ── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(10px); }
@@ -226,6 +328,7 @@
       .name { font-size: 1.75rem; }
     }
   </style>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 
@@ -267,18 +370,47 @@
             <div class="contact-value pending">Dialing it in...</div>
           </div>
         </a>
-        <a class="contact-item">
-          <div class="contact-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#d4a843" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-              <polyline points="22,6 12,13 2,6"/>
+        <div>
+          <button class="form-toggle-btn" id="formToggle" onclick="toggleForm()" type="button">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#d4a843" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </div>
+            <div class="contact-info-text">
+              <div class="contact-label">Email</div>
+              <div class="contact-value">Send me a message</div>
+            </div>
+            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
             </svg>
+          </button>
+          <div class="contact-form-wrap" id="contactFormWrap">
+            <form class="contact-form" action="https://formspree.io/f/xkoqpwoq" method="POST" id="contactForm">
+              <div class="form-field">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Your name" required />
+              </div>
+              <div class="form-field">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="your@email.com" required />
+              </div>
+              <div class="form-field">
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" name="phone" placeholder="(415) 555-0000" />
+              </div>
+              <div class="form-field">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" placeholder="How can I help you?" required></textarea>
+              </div>
+              <p class="form-disclaimer">Please do not include any sensitive or personal health information in your message.</p>
+              <div class="cf-turnstile" data-sitekey="0x4AAAAAACr-D5geGU2ZAunb" data-theme="dark"></div>
+              <button class="form-submit" type="submit">Send Message →</button>
+              <div class="form-success-msg" id="formSuccess">Thanks! I'll be in touch soon.</div>
+            </form>
           </div>
-          <div class="contact-info-text">
-            <div class="contact-label">Email</div>
-            <div class="contact-value pending">Drafting it up...</div>
-          </div>
-        </a>
+        </div>
       </div>
 
     </div>
@@ -286,5 +418,34 @@
 
   <div class="last-updated">Last updated March 2026</div>
 
+  <script>
+    function toggleForm() {
+      const btn  = document.getElementById('formToggle');
+      const wrap = document.getElementById('contactFormWrap');
+      btn.classList.toggle('open');
+      wrap.classList.toggle('open');
+    }
+
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST', body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          form.reset();
+          document.getElementById('formSuccess').style.display = 'block';
+          setTimeout(() => {
+            document.getElementById('formSuccess').style.display = 'none';
+          }, 5000);
+        }
+      } catch(err) {
+        console.error(err);
+      }
+    });
+  </script>
 </body>
 </html>
